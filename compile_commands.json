@@ -1,0 +1,22 @@
+[
+ {
+  "directory": "C:\\Users\\fredr\\source\\repos\\cgame",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-g",
+   "-o",
+   "main.exe",
+   "-IC:/Users/fredr/scoop/apps/glfw/current/include",
+   "-IC:/Users/fredr/source/repos/cgame/include",
+   "src/main.c",
+   "C:/Users/fredr/scoop/apps/glfw/current/lib-mingw-w64/libglfw3.a",
+   "-LC:/Users/fredr/scoop/apps/glfw/current/lib-mingw-w64",
+   "-lglfw3",
+   "-lgdi32",
+   "-lopengl32",
+   "-LC:Program Files (x86)Windows Kits10Lib10.0.22000.0umx64"
+  ],
+  "file": "src/main.c"
+ }
+]
