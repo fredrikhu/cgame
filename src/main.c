@@ -115,7 +115,7 @@ void render_scene()
 	//float green = (sin(time) / 2.0f) + 0.5f;
 	//int vertex_color_location = glGetUniformLocation(shader_program, "ourColor");
 
-	shader_activate(shader_program);
+	shader_use(shader_program);
 
 	//glUniform4f(vertex_color_location, 0.0f, green, 0.0f, 1.0f);
 

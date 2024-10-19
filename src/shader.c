@@ -28,7 +28,7 @@ Shader shader_new(char const *vertex_file, char const *fragment_file)
 	return shader_program;
 }
 
-void shader_activate(const Shader shader)
+void shader_use(const Shader shader)
 {
 	glUseProgram(shader);
 }
