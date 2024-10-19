@@ -4,11 +4,11 @@
 char *read_file(char const *path)
 {
 	FILE *file = NULL;
-	fopen_s(&file, path, "rb");
+	if (fopen_s(&file, path, "rb") != 0) return NULL;
 
-	fseek(file, 0, SEEK_END);
+	if (fseek(file, 0, SEEK_END) != 0) return NULL;
 	size_t length = ftell(file);
-	fseek(file, 0, SEEK_SET);
+	if (fseek(file, 0, SEEK_SET) != 0) return NULL;
 
 	size_t read_bytes = 0;
 	char *buffer = malloc(length + 1);
