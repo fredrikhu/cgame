@@ -4,16 +4,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+const size_t info_log_size = 512;
+
 unsigned int compile_shader(char const *path, GLenum shader_type);
-void check_shader(int shader);
-void check_shader_program(Shader shader_program);
+void check_shader(const int shader);
+void check_shader_program(const Shader shader_program);
 
 Shader shader_new(char const *vertex_file, char const *fragment_file)
 {
-	unsigned int vertex_shader = compile_shader(vertex_file, GL_VERTEX_SHADER);
-	unsigned int fragment_shader = compile_shader(fragment_file, GL_FRAGMENT_SHADER);
+	const unsigned int vertex_shader = compile_shader(vertex_file, GL_VERTEX_SHADER);
+	const unsigned int fragment_shader = compile_shader(fragment_file, GL_FRAGMENT_SHADER);
 
-	Shader shader_program = glCreateProgram();
+	const Shader shader_program = glCreateProgram();
 	glAttachShader(shader_program, vertex_shader);
 	glAttachShader(shader_program, fragment_shader);
 	glLinkProgram(shader_program);
@@ -38,8 +40,8 @@ void shader_free(Shader shader)
 
 unsigned int compile_shader(char const *path, GLenum shader_type)
 {
+	const unsigned int shader = glCreateShader(shader_type);
 	char *shader_source = read_file(path);
-	unsigned int shader = glCreateShader(shader_type);
 	glShaderSource(shader, 1, (char const* const*)&shader_source, NULL);
 	free(shader_source);
 	glCompileShader(shader);
@@ -49,27 +51,29 @@ unsigned int compile_shader(char const *path, GLenum shader_type)
 	return shader;
 }
 
-void check_shader(int shader)
+void check_shader(const int shader)
 {
 	int success;
-	char infoLog[512];
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+
 	if (!success)
 	{
-		glGetShaderInfoLog(shader, 512, NULL, infoLog);
-		printf("Error: Vertex shader compilation failed %s\n", infoLog);
+		char infoLog[info_log_size];
+		glGetShaderInfoLog(shader, info_log_size, NULL, infoLog);
+		printf("Error: Vertex shader compilation failed: %s\n", infoLog);
 	}
 }
 
 
-void check_shader_program(Shader shader_program)
+void check_shader_program(const Shader shader_program)
 {
 	int success;
-	char infoLog[512];
 	glGetProgramiv(shader_program, GL_LINK_STATUS, &success);
+
 	if (!success)
 	{
-		glGetProgramInfoLog(shader_program, 512, NULL, infoLog);
-		printf("Error: Linking shader program failed %s\n", infoLog);
+		char infoLog[info_log_size];
+		glGetProgramInfoLog(shader_program, info_log_size, NULL, infoLog);
+		printf("Error: Linking shader program failed: %s\n", infoLog);
 	}
 }
