@@ -28,15 +28,34 @@ Shader shader_new(char const *vertex_file, char const *fragment_file)
 	return shader_program;
 }
 
-void shader_activate(Shader shader)
+void shader_activate(const Shader shader)
 {
 	glUseProgram(shader);
 }
 
-void shader_free(Shader shader)
+void shader_free(const Shader shader)
 {
 	glDeleteProgram(shader);
 }
+
+void shader_set_bool(const Shader shader, char const *name, const bool value)
+{
+	const int uniform = glGetUniformLocation(shader, name);
+	glUniform1i(uniform, (int)value);
+}
+
+void shader_set_int(const Shader shader, char const *name, const int value)
+{
+	const int uniform = glGetUniformLocation(shader, name);
+	glUniform1i(uniform, value);
+}
+
+void shader_set_float(const Shader shader, char const *name, const float value)
+{
+	const int uniform = glGetUniformLocation(shader, name);
+	glUniform1i(uniform, value);
+}
+
 
 unsigned int compile_shader(char const *path, GLenum shader_type)
 {
