@@ -8,7 +8,7 @@ unsigned int compile_shader(char const *path, GLenum shader_type);
 void check_shader(int shader);
 void check_shader_program(Shader shader_program);
 
-Shader new_shader(char const *vertex_file, char const *fragment_file)
+Shader shader_new(char const *vertex_file, char const *fragment_file)
 {
 	unsigned int vertex_shader = compile_shader(vertex_file, GL_VERTEX_SHADER);
 	unsigned int fragment_shader = compile_shader(fragment_file, GL_FRAGMENT_SHADER);
@@ -26,12 +26,12 @@ Shader new_shader(char const *vertex_file, char const *fragment_file)
 	return shader_program;
 }
 
-void activate_shader(Shader shader)
+void shader_activate(Shader shader)
 {
 	glUseProgram(shader);
 }
 
-void free_shader(Shader shader)
+void shader_free(Shader shader)
 {
 	glDeleteProgram(shader);
 }

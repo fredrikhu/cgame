@@ -53,7 +53,7 @@ int main()
 	  glfwPollEvents();
   }
 
-  free_shader(shader_program);
+  shader_free(shader_program);
   glfwTerminate();
   return 0;
 }
@@ -103,7 +103,7 @@ void prepare_scene()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	shader_program = new_shader("shaders/shader.vert", "shaders/shader.frag");
+	shader_program = shader_new("shaders/shader.vert", "shaders/shader.frag");
 }
 
 void render_scene()
@@ -115,7 +115,7 @@ void render_scene()
 	//float green = (sin(time) / 2.0f) + 0.5f;
 	//int vertex_color_location = glGetUniformLocation(shader_program, "ourColor");
 
-	activate_shader(shader_program);
+	shader_activate(shader_program);
 
 	//glUniform4f(vertex_color_location, 0.0f, green, 0.0f, 1.0f);
 

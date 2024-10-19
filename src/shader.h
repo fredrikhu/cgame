@@ -3,9 +3,9 @@
 
 typedef unsigned int Shader;
 
-Shader new_shader(char const *vertex_file, char const *fragment_file);
-void activate_shader(Shader shader);
-void free_shader(Shader shader);
+Shader shader_new(char const *vertex_file, char const *fragment_file);
+void shader_activate(Shader shader);
+void shader_free(Shader shader);
 
 #endif
 
