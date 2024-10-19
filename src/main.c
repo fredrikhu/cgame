@@ -13,6 +13,7 @@ void prepare_scene();
 void compile_shaders();
 void check_shader(int shader);
 void check_shader_program();
+unsigned int compile_shader(char *path, GLenum shader_type);
 
 unsigned int vbo;
 unsigned int vao;
@@ -109,21 +110,8 @@ void prepare_scene()
 
 void compile_shaders()
 {
-	char *vertex_shader_source = read_file("shaders/shader.vert");
-	unsigned int vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertex_shader, 1, (char const* const*)&vertex_shader_source, NULL);
-	free(vertex_shader_source);
-	glCompileShader(vertex_shader);
-
-	check_shader(vertex_shader);
-
-	char* fragment_shader_source = read_file("shaders/shader.frag");
-	unsigned int fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragment_shader, 1, (char const * const*)&fragment_shader_source, NULL);
-	free(fragment_shader_source);
-	glCompileShader(fragment_shader);
-
-	check_shader(fragment_shader);
+	unsigned int vertex_shader = compile_shader("shaders/shader.vert", GL_VERTEX_SHADER);
+	unsigned int fragment_shader = compile_shader("shaders/shader.frag", GL_FRAGMENT_SHADER);
 
 	shader_program = glCreateProgram();
 	glAttachShader(shader_program, vertex_shader);
@@ -134,6 +122,19 @@ void compile_shaders()
 
 	glDeleteShader(vertex_shader);
 	glDeleteShader(fragment_shader);
+}
+
+unsigned int compile_shader(char *path, GLenum shader_type)
+{
+	char *shader_source = read_file(path);
+	unsigned int shader = glCreateShader(shader_type);
+	glShaderSource(shader, 1, (char const* const*)&shader_source, NULL);
+	free(shader_source);
+	glCompileShader(shader);
+
+	check_shader(shader);
+
+	return shader;
 }
 
 void check_shader(int shader)
