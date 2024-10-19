@@ -15,7 +15,6 @@ unsigned int vbo;
 unsigned int vao;
 unsigned int ebo;
 unsigned int shader_program;
-unsigned int second_shader_program;
 unsigned int vertex_shader;
 
 const char *vertex_shader_source = "#version 330 core\n"
@@ -32,15 +31,6 @@ const char *fragment_shader_source = "#version 330 core\n"
 	"void main()\n"
 	"{\n"
 	"    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-	"}\0";
-
-unsigned int second_fragment_shader;
-const char *second_fragment_shader_source = "#version 330 core\n"
-	"out vec4 FragColor;\n"
-	"\n"
-	"void main ()\n"
-	"{\n"
-	"    FragColor = vec4(0.2f, 0.5f, 1.0f, 1.0f);\n"
 	"}\0";
 
 int main()
@@ -145,23 +135,10 @@ void compile_shaders()
 
 	check_shader(fragment_shader);
 
-	second_fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(second_fragment_shader, 1, &second_fragment_shader_source, NULL);
-	glCompileShader(second_fragment_shader);
-
-	check_shader(second_fragment_shader);
-
 	shader_program = glCreateProgram();
 	glAttachShader(shader_program, vertex_shader);
 	glAttachShader(shader_program, fragment_shader);
 	glLinkProgram(shader_program);
-
-	check_shader_program();
-
-	second_shader_program = glCreateProgram();
-	glAttachShader(second_shader_program, vertex_shader);
-	glAttachShader(second_shader_program, second_fragment_shader);
-	glLinkProgram(second_shader_program);
 
 	check_shader_program();
 
@@ -201,8 +178,6 @@ void render_scene()
 	glUseProgram(shader_program);
 
 	glBindVertexArray(vao);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-	glUseProgram(second_shader_program);
-	glDrawArrays(GL_TRIANGLES, 3, 3);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindVertexArray(0);
 }
