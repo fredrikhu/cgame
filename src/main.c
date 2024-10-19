@@ -74,7 +74,7 @@ int main()
   return 0;
 }
 
-void framebuffer_size_callback(GLFWwindow *window, int width, int height)
+void framebuffer_size_callback(__attribute__ ((unused)) GLFWwindow *window, int width, int height)
 {
 	glViewport(0, 0, width, height);
 }
