@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-char *read_file(char *path)
+char *read_file(char const *path)
 {
 	FILE *file = NULL;
 	fopen_s(&file, path, "rb");

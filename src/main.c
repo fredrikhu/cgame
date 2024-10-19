@@ -4,21 +4,17 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stdio.h>
-#include "read_file.h"
+#include "shader.h"
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void process_input(GLFWwindow* window);
 void render_scene();
 void prepare_scene();
-void compile_shaders();
-void check_shader(int shader);
-void check_shader_program();
-unsigned int compile_shader(char *path, GLenum shader_type);
 
 unsigned int vbo;
 unsigned int vao;
 unsigned int ebo;
-unsigned int shader_program;
+Shader shader_program;
 
 int main()
 {
@@ -57,6 +53,7 @@ int main()
 	  glfwPollEvents();
   }
 
+  free_shader(shader_program);
   glfwTerminate();
   return 0;
 }
@@ -106,60 +103,7 @@ void prepare_scene()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	compile_shaders();
-}
-
-void compile_shaders()
-{
-	unsigned int vertex_shader = compile_shader("shaders/shader.vert", GL_VERTEX_SHADER);
-	unsigned int fragment_shader = compile_shader("shaders/shader.frag", GL_FRAGMENT_SHADER);
-
-	shader_program = glCreateProgram();
-	glAttachShader(shader_program, vertex_shader);
-	glAttachShader(shader_program, fragment_shader);
-	glLinkProgram(shader_program);
-
-	check_shader_program();
-
-	glDeleteShader(vertex_shader);
-	glDeleteShader(fragment_shader);
-}
-
-unsigned int compile_shader(char *path, GLenum shader_type)
-{
-	char *shader_source = read_file(path);
-	unsigned int shader = glCreateShader(shader_type);
-	glShaderSource(shader, 1, (char const* const*)&shader_source, NULL);
-	free(shader_source);
-	glCompileShader(shader);
-
-	check_shader(shader);
-
-	return shader;
-}
-
-void check_shader(int shader)
-{
-	int success;
-	char infoLog[512];
-	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		glGetShaderInfoLog(shader, 512, NULL, infoLog);
-		printf("Error: Vertex shader compilation failed %s\n", infoLog);
-	}
-}
-
-void check_shader_program()
-{
-	int success;
-	char infoLog[512];
-	glGetProgramiv(shader_program, GL_LINK_STATUS, &success);
-	if (!success)
-	{
-		glGetProgramInfoLog(shader_program, 512, NULL, infoLog);
-		printf("Error: Linking shader program failed %s\n", infoLog);
-	}
+	shader_program = new_shader("shaders/shader.vert", "shaders/shader.frag");
 }
 
 void render_scene()
@@ -171,7 +115,7 @@ void render_scene()
 	//float green = (sin(time) / 2.0f) + 0.5f;
 	//int vertex_color_location = glGetUniformLocation(shader_program, "ourColor");
 
-	glUseProgram(shader_program);
+	activate_shader(shader_program);
 
 	//glUniform4f(vertex_color_location, 0.0f, green, 0.0f, 1.0f);
 
