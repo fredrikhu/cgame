@@ -6,5 +6,7 @@ LDFLAGS=-L${GLFW}/lib-mingw-w64 -lglfw3 -lgdi32 -lopengl32 -L"C:\Program Files (
 main:
 	if not exist "bin" mkdir bin
 	if not exist "obj" mkdir obj
+	if not exist "bin/shaders" mkdir "bin/shaders"
 	gcc -c -o obj/glad.o $(CFLAGS) src/glad.c $(LDFLAGS)
-	gcc -Wall -Wextra -pedantic -g -o bin/main.exe $(CFLAGS) src/main.c obj/glad.o ${GLFW}/lib-mingw-w64/libglfw3.a $(LDFLAGS)
+	gcc -Wall -Wextra -pedantic -g -o bin/main.exe $(CFLAGS) src/main.c src/read_file.c obj/glad.o ${GLFW}/lib-mingw-w64/libglfw3.a $(LDFLAGS)
+	copy /Y src\shaders\* bin\shaders

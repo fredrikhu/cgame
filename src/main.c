@@ -1,7 +1,10 @@
+#include <stdlib.h>
+#include <math.h>
 #include <stdbool.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stdio.h>
+#include "read_file.h"
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void process_input(GLFWwindow* window);
@@ -15,23 +18,6 @@ unsigned int vbo;
 unsigned int vao;
 unsigned int ebo;
 unsigned int shader_program;
-unsigned int vertex_shader;
-
-const char *vertex_shader_source = "#version 330 core\n"
-	"layout (location = 0) in vec3 aPos;\n"
-	"void main()\n"
-	"{\n"
-	"    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-	"}\0";
-
-unsigned int fragment_shader;
-const char *fragment_shader_source = "#version 330 core\n"
-	"out vec4 FragColor;\n"
-	"\n"
-	"void main()\n"
-	"{\n"
-	"    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-	"}\0";
 
 int main()
 {
@@ -123,14 +109,18 @@ void prepare_scene()
 
 void compile_shaders()
 {
-	vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
+	char *vertex_shader_source = read_file("shaders/shader.vert");
+	unsigned int vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vertex_shader, 1, (char const* const*)&vertex_shader_source, NULL);
+	free(vertex_shader_source);
 	glCompileShader(vertex_shader);
 
 	check_shader(vertex_shader);
 
-	fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
+	char* fragment_shader_source = read_file("shaders/shader.frag");
+	unsigned int fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fragment_shader, 1, (char const * const*)&fragment_shader_source, NULL);
+	free(fragment_shader_source);
 	glCompileShader(fragment_shader);
 
 	check_shader(fragment_shader);
@@ -153,7 +143,7 @@ void check_shader(int shader)
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 	if (!success)
 	{
-		glGetShaderInfoLog(vertex_shader, 512, NULL, infoLog);
+		glGetShaderInfoLog(shader, 512, NULL, infoLog);
 		printf("Error: Vertex shader compilation failed %s\n", infoLog);
 	}
 }
@@ -175,7 +165,13 @@ void render_scene()
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
+	float time = glfwGetTime();
+	float green = (sin(time) / 2.0f) + 0.5f;
+	int vertex_color_location = glGetUniformLocation(shader_program, "ourColor");
+
 	glUseProgram(shader_program);
+
+	glUniform4f(vertex_color_location, 0.0f, green, 0.0f, 1.0f);
 
 	glBindVertexArray(vao);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
