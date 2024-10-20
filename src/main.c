@@ -7,12 +7,13 @@
 #include "shader.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image/stb_image.h>
+#include <cglm/cglm.h>
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void process_input(GLFWwindow* window);
 void render_scene();
 void prepare_scene();
-unsigned int load_texture(char const* path, GLenum format);
+unsigned int load_texture(char const* path, const GLenum format);
 
 unsigned int vbo;
 unsigned int vao;
@@ -128,7 +129,7 @@ void prepare_scene()
 	shader_set_int(shader_program, "texture2", 1);
 }
 
-unsigned int load_texture(char const* path, GLenum format)
+unsigned int load_texture(char const* path, const GLenum format)
 {
 	unsigned int texture;
 	int width, height, channels;
@@ -149,8 +150,8 @@ unsigned int load_texture(char const* path, GLenum format)
 	return texture;
 }
 
-double previous_time = 0;
-unsigned int frame_count = 0;
+//double previous_time = 0;
+//unsigned int frame_count = 0;
 void render_scene()
 {
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -161,7 +162,7 @@ void render_scene()
 //		double time = glfwGetTime();
 //		double time_diff = time - previous_time;
 //		previous_time = time;
-//		printf("fps: %d, frame time: %f\n", (int)(100.0/time_diff), time_diff);
+//		printf("fps: %d, frame time: %f\n", (int)(1.0/time_diff), time_diff);
 //	}
 
 	//float green = (sin(time) / 2.0f) + 0.5f;

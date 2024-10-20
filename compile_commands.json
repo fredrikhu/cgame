@@ -18,5 +18,52 @@
    "-LC:Program Files (x86)Windows Kits10Lib10.0.22000.0umx64"
   ],
   "file": "src/main.c"
+ },
+ {
+  "directory": "C:\\Users\\fredr\\source\\repos\\cgame",
+  "arguments": [
+   "gcc",
+   "-c",
+   "-o",
+   "obj/glad.o",
+   "-IC:/Users/fredr/scoop/apps/glfw/current/include",
+   "-Iinclude",
+   "src/glad.c",
+   "-LC:/Users/fredr/scoop/apps/glfw/current/lib-mingw-w64",
+   "-lglfw3",
+   "-lgdi32",
+   "-lopengl32",
+   "-LC:Program Files (x86)Windows Kits10Lib10.0.22000.0umx64",
+   "-LC:/Users/fredr/source/cglm/cglm-0.9.4/build/Release",
+   "-lcglm"
+  ],
+  "file": "src/glad.c"
+ },
+ {
+  "directory": "C:\\Users\\fredr\\source\\repos\\cgame",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-pedantic",
+   "-g",
+   "-o",
+   "bin/main.exe",
+   "-IC:/Users/fredr/scoop/apps/glfw/current/include",
+   "-Iinclude",
+   "src/main.c",
+   "src/read_file.c",
+   "src/shader.c",
+   "obj/glad.o",
+   "C:/Users/fredr/scoop/apps/glfw/current/lib-mingw-w64/libglfw3.a",
+   "-LC:/Users/fredr/scoop/apps/glfw/current/lib-mingw-w64",
+   "-lglfw3",
+   "-lgdi32",
+   "-lopengl32",
+   "-LC:Program Files (x86)Windows Kits10Lib10.0.22000.0umx64",
+   "-LC:/Users/fredr/source/cglm/cglm-0.9.4/build/Release",
+   "-lcglm"
+  ],
+  "file": "src/shader.c"
  }
 ]

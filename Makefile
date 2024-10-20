@@ -1,6 +1,8 @@
 GLFW=C:/Users/fredr/scoop/apps/glfw/current
+CGLM=C:/Users/fredr/source/cglm/cglm-0.9.4
 CFLAGS=-I${GLFW}/include -Iinclude
-LDFLAGS=-L${GLFW}/lib-mingw-w64 -lglfw3 -lgdi32 -lopengl32 -L"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.22000.0\um\x64"
+#-I${CGLM}/include
+LDFLAGS=-L${GLFW}/lib-mingw-w64 -lglfw3 -lgdi32 -lopengl32 -L"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.22000.0\um\x64" -L${CGLM}/build/Release -lcglm
 
 
 main:
