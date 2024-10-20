@@ -136,13 +136,13 @@ void render_scene()
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	if ((++frame_count)%100 == 0)
-	{
-		double time = glfwGetTime();
-		double time_diff = time - previous_time;
-		previous_time = time;
-		printf("fps: %d, frame time: %f\n", (int)(100.0/time_diff), time_diff);
-	}
+//	if ((++frame_count)%100 == 0)
+//	{
+//		double time = glfwGetTime();
+//		double time_diff = time - previous_time;
+//		previous_time = time;
+//		printf("fps: %d, frame time: %f\n", (int)(100.0/time_diff), time_diff);
+//	}
 
 	//float green = (sin(time) / 2.0f) + 0.5f;
 	//int vertex_color_location = glGetUniformLocation(shader_program, "ourColor");
