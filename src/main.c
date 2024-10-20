@@ -22,23 +22,12 @@ unsigned int wall_texture;
 unsigned int face_texture;
 Shader shader_program;
 
-mat4 transform = GLM_MAT4_IDENTITY_INIT;
-
 int main()
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-	vec4 vec = {1.0f, 0.0f, 0.0f, 1.0f};
-	//vec4 destvec = GLM_VEC4_ZERO_INIT;
-	glm_rotate(transform, glm_rad(90.0f), (vec3){0.0f, 0.0f, 1.0f});
-	glm_scale(transform, (vec3){ 0.5f, 0.5f, 0.5f });
-	//glm_translate(mat, (vec3){1.0f, 1.0f, 0.0f});
-	//glm_mat4_mulv(mat, vec, vec);
-
-	printf("%f %f %f %f", vec[0], vec[1], vec[2], vec[3]);
 
 	GLFWwindow *window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
 	if (window == NULL)
@@ -138,7 +127,6 @@ void prepare_scene()
 	shader_use(shader_program);
 	shader_set_int(shader_program, "texture1", 0);
 	shader_set_int(shader_program, "texture2", 1);
-	shader_set_m4fv(shader_program, "transform", (const float *)transform);
 }
 
 unsigned int load_texture(char const* path, const GLenum format)
@@ -177,12 +165,12 @@ void render_scene()
 //		printf("fps: %d, frame time: %f\n", (int)(1.0/time_diff), time_diff);
 //	}
 
-	//float green = (sin(time) / 2.0f) + 0.5f;
-	//int vertex_color_location = glGetUniformLocation(shader_program, "ourColor");
-
 	shader_use(shader_program);
 
-	//glUniform4f(vertex_color_location, 0.0f, green, 0.0f, 1.0f);
+	mat4 transform = GLM_MAT4_IDENTITY_INIT;
+	glm_translate(transform, (vec3){0.5f, -0.5f, 0.0f});
+	glm_rotate(transform, glm_rad(5 * glfwGetTime()), (vec3){0.0f, 0.0f, 1.0f});
+	shader_set_m4fv(shader_program, "transform", (const float *)transform);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, wall_texture);
