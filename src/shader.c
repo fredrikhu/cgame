@@ -56,6 +56,11 @@ void shader_set_float(const Shader shader, char const *name, const float value)
 	glUniform1i(uniform, value);
 }
 
+void shader_set_m4fv(const Shader shader, char const *name, const float *value)
+{
+	const int uniform = glGetUniformLocation(shader, name);
+	glUniformMatrix4fv(uniform, 1, GL_FALSE, value);
+}
 
 unsigned int compile_shader(char const *path, GLenum shader_type)
 {

@@ -11,6 +11,7 @@ void shader_free(const Shader shader);
 void shader_set_bool(const Shader shader, char const *name, const bool value);
 void shader_set_int(const Shader shader, char const *name, const int value);
 void shader_set_float(const Shader shader, char const *name, const float value);
+void shader_set_m4fv(const Shader shader, char const *name, const float *value);
 
 #endif
 

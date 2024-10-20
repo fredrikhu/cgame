@@ -22,47 +22,58 @@ unsigned int wall_texture;
 unsigned int face_texture;
 Shader shader_program;
 
+mat4 transform = GLM_MAT4_IDENTITY_INIT;
+
 int main()
 {
-  glfwInit();
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwInit();
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-  GLFWwindow *window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
-  if (window == NULL)
-  {
-    glfwTerminate();
-	printf("Failed to create GLFW window\n");
-    return -1;
-  }
-  glfwMakeContextCurrent(window);
-  glfwSwapInterval(0);
+	vec4 vec = {1.0f, 0.0f, 0.0f, 1.0f};
+	//vec4 destvec = GLM_VEC4_ZERO_INIT;
+	glm_rotate(transform, glm_rad(90.0f), (vec3){0.0f, 0.0f, 1.0f});
+	glm_scale(transform, (vec3){ 0.5f, 0.5f, 0.5f });
+	//glm_translate(mat, (vec3){1.0f, 1.0f, 0.0f});
+	//glm_mat4_mulv(mat, vec, vec);
 
-  if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-  {
-	  printf("Failed to initialize GLAD\n");
-	  return -1;
-  }
+	printf("%f %f %f %f", vec[0], vec[1], vec[2], vec[3]);
 
-  glViewport(0, 0, 800, 600);
-  glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	GLFWwindow *window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
+	if (window == NULL)
+	{
+		glfwTerminate();
+		printf("Failed to create GLFW window\n");
+		return -1;
+	}
+	glfwMakeContextCurrent(window);
+	glfwSwapInterval(0);
 
-  prepare_scene();
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	{
+		printf("Failed to initialize GLAD\n");
+		return -1;
+	}
 
-  while (!glfwWindowShouldClose(window))
-  {
-	  process_input(window);
+	glViewport(0, 0, 800, 600);
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-	  render_scene();
+	prepare_scene();
 
-	  glfwSwapBuffers(window);
-	  glfwPollEvents();
-  }
+	while (!glfwWindowShouldClose(window))
+	{
+		process_input(window);
 
-  shader_free(shader_program);
-  glfwTerminate();
-  return 0;
+		render_scene();
+
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+	}
+
+	shader_free(shader_program);
+	glfwTerminate();
+	return 0;
 }
 
 void framebuffer_size_callback(__attribute__ ((unused)) GLFWwindow *window, int width, int height)
@@ -127,6 +138,7 @@ void prepare_scene()
 	shader_use(shader_program);
 	shader_set_int(shader_program, "texture1", 0);
 	shader_set_int(shader_program, "texture2", 1);
+	shader_set_m4fv(shader_program, "transform", (const float *)transform);
 }
 
 unsigned int load_texture(char const* path, const GLenum format)
