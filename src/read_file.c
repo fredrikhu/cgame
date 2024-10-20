@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-char *read_file(char const *path)
+char *read_file(char const path[static 1])
 {
 	FILE *file = NULL;
 	if (fopen_s(&file, path, "rb") != 0) return NULL;

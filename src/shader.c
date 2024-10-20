@@ -6,11 +6,11 @@
 
 const size_t info_log_size = 512;
 
-unsigned int compile_shader(char const *path, GLenum shader_type);
+unsigned int compile_shader(char const path[static 1], GLenum shader_type);
 void check_shader(const int shader);
 void check_shader_program(const Shader shader_program);
 
-Shader shader_new(char const *vertex_file, char const *fragment_file)
+Shader shader_new(char const vertex_file[static 1], char const fragment_file[static 1])
 {
 	const unsigned int vertex_shader = compile_shader(vertex_file, GL_VERTEX_SHADER);
 	const unsigned int fragment_shader = compile_shader(fragment_file, GL_FRAGMENT_SHADER);
@@ -38,31 +38,31 @@ void shader_free(const Shader shader)
 	glDeleteProgram(shader);
 }
 
-void shader_set_bool(const Shader shader, char const *name, const bool value)
+void shader_set_bool(const Shader shader, char const name[static 1], const bool value)
 {
 	const int uniform = glGetUniformLocation(shader, name);
 	glUniform1i(uniform, (int)value);
 }
 
-void shader_set_int(const Shader shader, char const *name, const int value)
+void shader_set_int(const Shader shader, char const name[static 1], const int value)
 {
 	const int uniform = glGetUniformLocation(shader, name);
 	glUniform1i(uniform, value);
 }
 
-void shader_set_float(const Shader shader, char const *name, const float value)
+void shader_set_float(const Shader shader, char const name[static 1], const float value)
 {
 	const int uniform = glGetUniformLocation(shader, name);
 	glUniform1i(uniform, value);
 }
 
-void shader_set_m4fv(const Shader shader, char const *name, const float *value)
+void shader_set_m4fv(const Shader shader, char const name[static 1], const float *value)
 {
 	const int uniform = glGetUniformLocation(shader, name);
 	glUniformMatrix4fv(uniform, 1, GL_FALSE, value);
 }
 
-unsigned int compile_shader(char const *path, GLenum shader_type)
+unsigned int compile_shader(char const path[static 1], GLenum shader_type)
 {
 	const unsigned int shader = glCreateShader(shader_type);
 	char *shader_source = read_file(path);

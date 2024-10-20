@@ -6,3 +6,5 @@ scoop install python
 scoop install cmake
 pip install compiledb
 ```
+
+Modern C: https://www.youtube.com/watch?v=lLv1s7rKeCM
