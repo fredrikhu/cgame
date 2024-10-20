@@ -134,6 +134,9 @@ unsigned int load_texture(char const* path, GLenum format)
 	int width, height, channels;
 	unsigned char *data = stbi_load(path, &width, &height, &channels, 0);
 
+	if (!data)
+		return 0;
+
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, format, GL_UNSIGNED_BYTE, data);
