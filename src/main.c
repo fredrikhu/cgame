@@ -12,12 +12,13 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void process_input(GLFWwindow* window);
 void render_scene();
 void prepare_scene();
+unsigned int load_texture(char const* path, GLenum format);
 
 unsigned int vbo;
 unsigned int vao;
 unsigned int ebo;
-unsigned int texture;
-unsigned int texture2;
+unsigned int wall_texture;
+unsigned int face_texture;
 Shader shader_program;
 
 int main()
@@ -89,31 +90,13 @@ void prepare_scene()
 		1, 2, 3,
 	};
 
-	int width, height, channels;
-	unsigned char *data = stbi_load("textures/wall.jpg", &width, &height, &channels, 0);
-
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-	stbi_image_free(data);
-
-	data = stbi_load("textures/awesomeface.png", &width, &height, &channels, 0);
-
-	glGenTextures(1, &texture2);
-	glBindTexture(GL_TEXTURE_2D, texture2);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-	stbi_image_free(data);
-
-	glBindTexture(GL_TEXTURE_2D, 0);
+	wall_texture = load_texture("textures/wall.jpg", GL_RGB);
+	face_texture = load_texture("textures/awesomeface.png", GL_RGBA);
 
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
@@ -145,6 +128,24 @@ void prepare_scene()
 	shader_set_int(shader_program, "texture2", 1);
 }
 
+unsigned int load_texture(char const* path, GLenum format)
+{
+	unsigned int texture;
+	int width, height, channels;
+	unsigned char *data = stbi_load(path, &width, &height, &channels, 0);
+
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	stbi_image_free(data);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	return texture;
+}
+
 double previous_time = 0;
 unsigned int frame_count = 0;
 void render_scene()
@@ -168,9 +169,9 @@ void render_scene()
 	//glUniform4f(vertex_color_location, 0.0f, green, 0.0f, 1.0f);
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glBindTexture(GL_TEXTURE_2D, wall_texture);
 	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, texture2);
+	glBindTexture(GL_TEXTURE_2D, face_texture);
 	glBindVertexArray(vao);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
