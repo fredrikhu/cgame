@@ -7,7 +7,7 @@ char *read_file(char const *path)
 	if (fopen_s(&file, path, "rb") != 0) return NULL;
 
 	if (fseek(file, 0, SEEK_END) != 0) return NULL;
-	size_t length = ftell(file);
+	const size_t length = ftell(file);
 	if (fseek(file, 0, SEEK_SET) != 0) return NULL;
 
 	size_t read_bytes = 0;
