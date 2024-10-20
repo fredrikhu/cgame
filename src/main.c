@@ -17,6 +17,7 @@ unsigned int vbo;
 unsigned int vao;
 unsigned int ebo;
 unsigned int texture;
+unsigned int texture2;
 Shader shader_program;
 
 int main()
@@ -75,6 +76,7 @@ void process_input(GLFWwindow* window)
 
 void prepare_scene()
 {
+	stbi_set_flip_vertically_on_load(true);
 	float vertices[] = {
 		// positions         // colors          // textures
 		 0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  1.0f, 0.0f,   // bottom right
@@ -101,6 +103,16 @@ void prepare_scene()
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	stbi_image_free(data);
+
+	data = stbi_load("textures/awesomeface.png", &width, &height, &channels, 0);
+
+	glGenTextures(1, &texture2);
+	glBindTexture(GL_TEXTURE_2D, texture2);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	stbi_image_free(data);
+
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glGenVertexArrays(1, &vao);
@@ -128,6 +140,9 @@ void prepare_scene()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	shader_program = shader_new("shaders/shader.vert", "shaders/shader.frag");
+	shader_use(shader_program);
+	shader_set_int(shader_program, "texture1", 0);
+	shader_set_int(shader_program, "texture2", 1);
 }
 
 double previous_time = 0;
@@ -152,7 +167,10 @@ void render_scene()
 
 	//glUniform4f(vertex_color_location, 0.0f, green, 0.0f, 1.0f);
 
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texture2);
 	glBindVertexArray(vao);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
